@@ -2,6 +2,8 @@
 
 ## Publish to PyPI
 
+If version 0.2.4 is already on PyPI, bump version in pyproject.toml first.
+
 ```bash
 cd c:\nwf\libraries\nwf-core
 pip install build twine

@@ -8,7 +8,7 @@ from nwf.index import BruteForceIndex, Index
 from nwf.metric import cosine, euclidean, mahalanobis_symmetric
 from nwf.potential import potential, potential_batch
 
-__version__ = "0.2.4"
+__version__ = "0.2.5"
 __all__ = [
     "Charge",
     "Field",
