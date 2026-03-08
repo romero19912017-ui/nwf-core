@@ -132,16 +132,27 @@ class Field:
         p.mkdir(parents=True, exist_ok=True)
         vectors = np.stack([c.to_vector() for c in self._charges], axis=0)
         np.save(p / "vectors.npy", vectors)
+        alphas = [float(c.alpha) for c in self._charges]
         with open(p / "meta.json", "w", encoding="utf-8") as f:
-            json.dump({"labels": self._labels, "ids": self._ids}, f, ensure_ascii=False)
+            json.dump(
+                {"labels": self._labels, "ids": self._ids, "alphas": alphas},
+                f,
+                ensure_ascii=False,
+            )
 
     def load(self, path: Union[str, Path]) -> None:
-        """Load field from directory."""
+        """Load field from directory. Backward compatible: missing alphas default to 1.0."""
         p = Path(path)
         vectors = np.load(p / "vectors.npy")
         with open(p / "meta.json", encoding="utf-8") as f:
             meta = json.load(f)
-        self._charges = [Charge.from_vector(vectors[i]) for i in range(len(vectors))]
+        alphas = meta.get("alphas", [1.0] * len(vectors))
+        if len(alphas) != len(vectors):
+            alphas = [1.0] * len(vectors)
+        self._charges = [
+            Charge.from_vector(vectors[i], alpha=float(alphas[i]))
+            for i in range(len(vectors))
+        ]
         self._labels = meta["labels"]
         self._ids = meta["ids"]
         self._id_to_idx = {iid: i for i, iid in enumerate(self._ids)}

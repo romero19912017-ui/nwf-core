@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0] - 2026-03
+
+### Added
+- **Charge.alpha** — weight for superposition (axiom 4). Default 1.0, full backward compatibility.
+- **Charge.with_alpha(new_alpha)** — create copy with different weight.
+- **potential**, **potential_batch** — now use alpha: Phi = sum_i alpha_i * exp(-0.5*d_i^2).
+- **potential_batch** — optional `alpha_all` parameter for weighted batch queries.
+- **Field save/load** — stores and restores alpha; backward compatible (missing alphas default to 1.0).
+- **weighted_demo.py** — example: weighted voting vs standard, potential with alpha.
+
+### Changed
+- Charge: to_dict/from_dict include alpha.
+- Charge.from_vector(v, alpha=1.0) — optional alpha for load compatibility.
+
 ## [0.2.2] - 2025-03
 
 - Updated README (EN + RU): full NWF description, components, use cases

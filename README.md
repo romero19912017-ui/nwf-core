@@ -36,12 +36,14 @@ pip install nwf-core
 ## Components
 
 ### Charge
-Base data structure: center `z` and diagonal covariance `sigma`.
+Base data structure: center `z`, diagonal covariance `sigma`, weight `alpha` (axiom 4).
 
-- `to_dict()` / `from_dict()` — JSON serialization
-- `to_vector()` — concatenated `[z, log(sigma)]` for indexing
+- `alpha` — weight for superposition (default 1.0); used in potential
+- `to_dict()` / `from_dict()` — JSON serialization (includes alpha)
+- `to_vector()` — concatenated `[z, log(sigma)]` for indexing (alpha not in vector)
 - `whiten(mean, std)` — transform to whitened space
 - `clip_sigma(min_val)` — ensure minimum sigma values
+- `with_alpha(new_alpha)` — return copy with different weight
 
 ### Field
 Container for charges with labels and ids.
@@ -59,8 +61,8 @@ Container for charges with labels and ids.
 - `cosine(z1, z2)` — cosine distance
 
 ### Potential (OOD detection)
-- `potential(r, charges)` — semantic potential at point r; higher = in-distribution
-- `potential_batch(r, z_all, sigma_all)` — batch version for multiple queries
+- `potential(r, charges)` — Phi = sum_i alpha_i * exp(-0.5*d_i^2); uses charge.alpha
+- `potential_batch(r, z_all, sigma_all, alpha_all=None)` — batch version; alpha_all defaults to ones
 
 ### Indices
 - **BruteForceIndex** — exact search for small datasets; supports `l2`, `cosine`; batch search
@@ -107,12 +109,14 @@ pip install nwf-core[examples]
 | [quickstart.py](examples/quickstart.py) | Minimal workflow: synthetic 2D data, Field, k-NN, AgreementRatio |
 | [calibration_demo.py](examples/calibration_demo.py) | Confidence calibration: AgreementRatio, PlattScaler, reliability diagram, ECE |
 | [potential_ood.py](examples/potential_ood.py) | OOD detection via semantic potential: histograms, ROC, AUC |
+| [weighted_demo.py](examples/weighted_demo.py) | Axiom 4: alpha in potential and weighted k-NN voting |
 
 Run:
 ```bash
 python examples/quickstart.py --k 5
 python examples/calibration_demo.py --save results/cal.png
 python examples/potential_ood.py --save results/ood.png
+python examples/weighted_demo.py --save results/weighted.png
 ```
 
 Notebooks in `notebooks/` mirror these examples.
@@ -128,6 +132,7 @@ Notebooks in `notebooks/` mirror these examples.
 | **OOD detection** | Flag out-of-distribution inputs; safety-critical systems | potential, potential_batch |
 | **Active learning** | Uncertainty-based sample selection for labeling | trace(sigma), Field |
 | **Retrieval** | Semantic search with uncertainty-aware distance | FAISSIndex, mahalanobis_symmetric |
+| **Weighted superposition** | Axiom 4: charges with alpha for imbalanced data | Charge.alpha, potential, weighted vote |
 
 ---
 
@@ -181,7 +186,7 @@ pip install nwf-core
 
 ## Компоненты
 
-- **Charge** — заряд (z, sigma), сериализация, whiten, clip_sigma
+- **Charge** — заряд (z, sigma, alpha), whiten, clip_sigma, with_alpha
 - **Field** — контейнер зарядов, add/remove/search, save/load
 - **Метрики** — mahalanobis_symmetric, euclidean, cosine
 - **Потенциал** — potential, potential_batch для OOD-детекции
