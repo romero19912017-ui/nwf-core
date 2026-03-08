@@ -95,6 +95,42 @@ See [documentation](https://romero19912017-ui.github.io/nwf-core/) and [nwf-visi
 
 ---
 
+## Examples
+
+Install with examples dependencies:
+```bash
+pip install nwf-core[examples]
+```
+
+| Script | Description |
+|--------|-------------|
+| [quickstart.py](examples/quickstart.py) | Minimal workflow: synthetic 2D data, Field, k-NN, AgreementRatio |
+| [calibration_demo.py](examples/calibration_demo.py) | Confidence calibration: AgreementRatio, PlattScaler, reliability diagram, ECE |
+| [potential_ood.py](examples/potential_ood.py) | OOD detection via semantic potential: histograms, ROC, AUC |
+
+Run:
+```bash
+python examples/quickstart.py --k 5
+python examples/calibration_demo.py --save results/cal.png
+python examples/potential_ood.py --save results/ood.png
+```
+
+Notebooks in `notebooks/` mirror these examples.
+
+---
+
+## Application areas (сферы применения)
+
+| Area | Use case | Components |
+|------|----------|------------|
+| **Continual / incremental learning** | Add new classes without retraining; no catastrophic forgetting | Field, Charge, k-NN |
+| **Calibrated predictions** | Reliable confidence scores; reliability diagrams, ECE | AgreementRatio, PlattScaler |
+| **OOD detection** | Flag out-of-distribution inputs; safety-critical systems | potential, potential_batch |
+| **Active learning** | Uncertainty-based sample selection for labeling | trace(sigma), Field |
+| **Retrieval** | Semantic search with uncertainty-aware distance | FAISSIndex, mahalanobis_symmetric |
+
+---
+
 ## Development
 
 ```bash

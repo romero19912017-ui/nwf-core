@@ -30,6 +30,7 @@ dependencies = [
 
 [project.optional-dependencies]
 faiss = ["faiss-cpu>=1.7"]
+examples = ["matplotlib>=3.5", "scikit-learn>=1.0"]
 torch = ["torch>=1.10"]
 docs = ["sphinx>=5.0", "furo>=2023.0"]
 dev = ["black", "isort", "flake8", "pytest", "pre-commit"]
