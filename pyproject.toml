@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nwf-core"
+version = "0.2.3"
+description = "Neural Weight Fields: incremental learning with built-in uncertainty. Charge, Field, metrics, FAISS index, calibrators."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [{name = "Belousov Roman Sergeevich", email = "roma.belyy.5550955@mail.ru"}]
+keywords = ["machine-learning", "continual-learning", "neural-weight-fields", "uncertainty"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.21",
+    "scipy>=1.7",
+    "scikit-learn>=1.0",
+]
+
+[project.optional-dependencies]
+faiss = ["faiss-cpu>=1.7"]
+torch = ["torch>=1.10"]
+docs = ["sphinx>=5.0", "furo>=2023.0"]
+dev = ["black", "isort", "flake8", "pytest", "pre-commit"]
+all = ["nwf-core[faiss,torch,docs,dev]"]
+
+[project.urls]
+Homepage = "https://github.com/romero19912017-ui/nwf-core"
+Repository = "https://github.com/romero19912017-ui/nwf-core"
+Documentation = "https://github.com/romero19912017-ui/nwf-core"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.9"
+strict = true
+warn_return_any = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-v --tb=short"
